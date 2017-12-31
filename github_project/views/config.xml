@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <menuitem action="github_config_action" id="github_config"
+               parent="project.menu_project_config" groups="base.group_no_one"/>
+
+     <record id="github_config_action" model="ir.actions.act_window">
+            <field name="name">Github</field>
+            <field name="res_model">github_project.web_hook</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a new github app.
+              </p>
+            </field>
+        </record>
+</odoo>

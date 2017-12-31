@@ -25,9 +25,8 @@ class GithubController(http.Controller):
         state = kwargs.get('state')
         web_hook = request.env['github_project.web_hook'].search([], limit=1)
         if web_hook and code and state:
-            # url = request.env['ir.config_parameter'].sudo().get_param('web.base.url') + \
-            #     '/github/callback?code=' + str(code) + '&state=' + str(state)
-            url = 'https://nodegithubnotifi.herokuapp.com/test/callback?code=e9a5f82764c884280c51&state=ukJa7BjG0XK3rqSeeuw6I3pAyh4ynY'
+            url = request.env['ir.config_parameter'].sudo().get_param('web.base.url') + \
+                '/github/callback?code=' + str(code) + '&state=' + str(state)
             github = OAuth2Session(web_hook.client_id)
             access_token = github.fetch_token(web_hook.token_url, client_secret=web_hook.client_secret,
                                               authorization_response=url)

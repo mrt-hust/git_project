@@ -24,9 +24,11 @@ class GithubProject(models.Model):
         if self.type == 'github' and not self.current_user_id.github_access_token:
 
             web_hook = self.env['github_project.web_hook'].search([], limit=1)
+            print(web_hook)
             if web_hook:
                 github = OAuth2Session(web_hook.client_id)
                 authorization_url, state = github.authorization_url(web_hook.authorization_base_url)
+                print(authorization_url)
                 self.link_connection = authorization_url
         else:
             self.link_connection = '/get/repositories'

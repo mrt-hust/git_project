@@ -7,6 +7,7 @@
     'depends': ['project', 'web'],
     'data': [
         'views/project_views.xml',
+        'views/config.xml',
         'views/header.xml'
     ],
     'installable': True,
