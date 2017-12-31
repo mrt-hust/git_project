@@ -1,4 +1,4 @@
-from requests_oauthlib import OAuth1Session
+from requests_oauthlib import OAuth2Session
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
@@ -24,7 +24,7 @@ class GithubProject(models.Model):
         if self.type == 'github' and not self.current_user_id.github_access_token:
             web_hook = self.env['github_project.web_hook'].search([], limit=1)
             if web_hook:
-                github = OAuth1Session(web_hook.client_id)
+                github = OAuth2Session(web_hook.client_id)
                 authorization_url, state = github.authorization_url(web_hook.authorization_base_url)
                 self.link_connection = authorization_url
         else:
