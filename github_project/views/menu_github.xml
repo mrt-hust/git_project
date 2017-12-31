@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_connect_github" model="ir.actions.act_url">
+        <field name="name">Connect Github</field>
+        <field name="target">popup</field>
+        <field name="url">/jobs</field>
+    </record>
+</odoo>

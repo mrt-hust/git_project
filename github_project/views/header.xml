@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="github project assets" inherit_id="project.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/github_project/static/src/js/custom_fields.js"></script>
+        </xpath>
+    </template>
+</odoo>

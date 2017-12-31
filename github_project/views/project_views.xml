@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_project_view_form_simplified_inherit" model="ir.ui.view">
+        <field name="name">github_project.project.view.form.simplified</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="type" class="oe_inline"/>
+            </xpath>
+            <xpath expr="//sheet/group" position="inside">
+                <group attrs="{'invisible': [('type', '!=', 'github')]}">
+                    <field name="current_user_id"/>
+                    <label for="repo" string="Repositories"/>
+                    <div name="repo">
+                        <field name="repository_id"
+                           options="{'no_create_edit': True}" class="oe_inline"/>
+                        <field name="link_connection" widget="url" text="Refresh" href="link_connection"
+                               target="popup" class="oe_inline" readonly="1"/>
+                    </div>
+                </group>
+            </xpath>
+             <xpath expr="//sheet" position="inside">
+                <notebook attrs="{'invisible': [('type', '!=', 'github')]}">
+                    <page string="Users">
+                        <field name="user_ids"/>
+                    </page>
+                </notebook>
+            </xpath>
+            <!--<form string="Project">-->
+                <!--<sheet>-->
+                    <!--<group>-->
+                        <!--<group>-->
+                            <!--<field name="name" class="o_project_name oe_inline"-->
+                                   <!--string="Project Name" placeholder="e.g. Office Party"/>-->
+                            <!--<label for="alias_name" string="Choose a Project Email"-->
+                                   <!--attrs="{'invisible': [('alias_domain', '=', False)]}"/>-->
+                            <!--<div name="alias_def" attrs="{'invisible': [('alias_domain', '=', False)]}">-->
+                                <!--<field name="alias_name" class="oe_inline"/>@-->
+                                <!--<field name="alias_domain" class="oe_inline" readonly="1"/>-->
+                            <!--</div>-->
+                            <!--<field name="user_id" invisible="1"/>-->
+                        <!--</group>-->
+                    <!--</group>-->
+                    <!--<footer>-->
+                        <!--<button string="Create" name="close_dialog" type="object" class="btn-primary"/>-->
+                        <!--<button string="Create &amp; Edit" name="edit_dialog" type="object" class="btn-primary"/>-->
+                        <!--<button string="Discard" class="btn-default" special="cancel"/>-->
+                    <!--</footer>-->
+
+                <!--</sheet>-->
+            <!--</form>-->
+        </field>
+    </record>
+</odoo>

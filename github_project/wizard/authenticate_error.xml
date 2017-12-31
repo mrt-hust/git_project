@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="authenticate_error" model="ir.ui.view">
+		<field name="model">popup.authenticate_error</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form>
+				<field name="message"/>
+			</form>
+			<footer>
+				<button special="cancel" class="oe_highlight" string="Ok"/>
+			</footer>
+		</field>
+    </record>
+</odoo>
