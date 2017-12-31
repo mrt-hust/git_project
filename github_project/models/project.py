@@ -61,6 +61,7 @@ class Repository(models.Model):
 
 class WebHookApp(models.Model):
     _name = 'github_project.web_hook'
+    name = fields.Char(string='Name', default='Github')
     client_id = fields.Char(string='Client ID', default='acc785f6b36dc847308b')
     client_secret = fields.Char(string='Client Secret', default='4b98519c3cc08073dc25d2c460e58e0fbe9895f5')
     authorization_base_url = fields.Char(string='Authorization Url',
