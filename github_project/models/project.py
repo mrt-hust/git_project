@@ -7,12 +7,11 @@ from odoo.exceptions import UserError
 class GithubProject(models.Model):
     _inherit = 'project.project'
 
-    test = fields.Char()
     type = fields.Selection([('normal', 'Normal'), ('github', 'Github')], default="normal")
     link_connection = fields.Char(string='Connect to', compute='_compute_link')
     user_ids = fields.Many2many('res.users', string='Users')
-    repository_id = fields.Many2one('github_project.repository', string='Repository', ondelete='cascade',
-                                    domain=lambda self: self._get_accessible_repositories())
+    repository_id = fields.Many2one('github_project.repository', string='Repository',
+                                    domain=lambda self: self._get_accessible_repositories(), required=True)
     current_user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, readonly=True)
 
     def _get_accessible_repositories(self):
@@ -33,9 +32,23 @@ class GithubProject(models.Model):
     @api.model
     def create(self, vals):
         if vals['type'] == 'github':
-            admin = self.search([('id', '=', vals['admin_id'])])
-            if not admin.github_access_token:
-                raise UserError(_("Please click to Github to authenticate!"))
+            owner = self.env['res.users'].search([('id', '=', vals['user_id'])])
+            if not owner.github_access_token:
+                raise UserError(_("Please click to Refresh to authenticated and get Repositories!"))
+            github_user = self.env['res.users'].search([('name', 'ilike', 'Github')])
+            if len(github_user) > 0:
+                github_user = github_user[0]
+            else:
+                github_user = self.env['res.users'].create({'name': 'Github'})
+                print(github_user.id)
+                print(self.user_ids)
+
+            self.env['mail.channel'].create({'name': 'Github - ' + self.name,
+                                            'privacy': 'private',
+                                             'channel_partner_ids':
+                                                 [(4, x) for x in self.user_ids] + [(4, github_user.id)],
+                                             'email_send': False
+                                             })
         return super(GithubProject, self).create(vals)
 
 
@@ -66,9 +79,4 @@ class WebHookApp(models.Model):
                                                  'scope=user%20public_repo%20admin:repo_hook')
     token_url = fields.Char(string='Token Url', default='https://github.com/login/oauth/access_token')
 
-
-class GithubChannel(models.Model):
-    _inherit = 'mail.channel'
-
-    pin = fields.Boolean(default=False)
 

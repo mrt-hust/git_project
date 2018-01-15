@@ -4,5 +4,11 @@
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/github_project/static/src/js/custom_fields.js"></script>
         </xpath>
+        <xpath expr="//script[@src='/mail/static/src/js/chat_manager.js']" position="replace">
+            <script type="text/javascript" src="/github_project/static/src/js/chat_manager.js"></script>
+        </xpath>
+        <xpath expr="//script[@src='/mail/static/src/js/utils.js']" position="replace">
+            <script type="text/javascript" src="/github_project/static/src/js/utils.js"></script>
+        </xpath>
     </template>
 </odoo>

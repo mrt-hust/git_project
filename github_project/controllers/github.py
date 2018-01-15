@@ -11,11 +11,6 @@ class GithubController(http.Controller):
     def get_repositories(self, **kwargs):
         access_token = request.env.user.github_access_token
         print(access_token)
-        request.env['mail.channel'].create({'name': 'github7',
-                                            'privacy': 'private',
-                                            'channel_partner_ids': [(4, request.env.user.partner_id.id), (4, 45)],
-                                            'email_send': False,
-                                            'pin': True})
 
         return "hello"
 
