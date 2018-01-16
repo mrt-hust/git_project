@@ -109,8 +109,11 @@ class GithubController(http.Controller):
     @http.route(['/repositories/callback'], type='json', auth="public", methods=['POST'])
     def repo_callback(self, **kwargs):
         data = request.jsonrequest
-        url = data['head_commit']['url']
-        author = data['head_commit']['username']
+        commit = data.get('head_commit', False)
+        if not commit:
+            return False
+        url = commit['url']
+        author = commit['username']
         repo = author + '/' + data['repository']['name']
         author_url = 'https://github.com/' + author
         message = data['head_commit']['message']
