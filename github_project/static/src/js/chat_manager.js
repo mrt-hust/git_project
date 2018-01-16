@@ -762,7 +762,6 @@ var ChatManager =  Class.extend(Mixins.EventDispatcherMixin, ServicesMixin, {
 
     post_message: function (data, options) {
         var self = this;
-        console.log(data.content);
         options = options || {};
 
         // This message will be received from the mail composer as html content subtype

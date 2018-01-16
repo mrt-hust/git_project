@@ -119,7 +119,7 @@ class GithubController(http.Controller):
         message = commit['message']
         notification = _(
             '<div class="o_mail_notification">'
-            ' New <a href="%s"><b>#commit</b></a> by <a href="%s"><b>%s</b></a>'
+            ' New <a href="%s" target="_blank"><b>#commit</b></a> by <a href="%s" target="_blank"><b>%s</b></a>'
             '<br><i>%s</i>'
             '</div>') % (url, author_url, author, message)
         git_user = request.env['res.users'].sudo().search([('name', 'ilike', 'Github')])[0]

@@ -44,14 +44,6 @@ var _beep = (function () {
 })();
 
 function parse_and_transform(html_string, transform_function) {
-    // add for disable escape html
-    console.log(html_string);
-    var array = /^no-escape.*no-escape$/g.exec(html_string);
-    console.log(array);
-    if(array){
-        return html_string.replace(/no-escape/g, '');
-    }
-
     var open_token = "OPEN" + Date.now();
     var string = html_string.replace(/&lt;/g, open_token);
     var children = $('<div>').html(string).contents();
