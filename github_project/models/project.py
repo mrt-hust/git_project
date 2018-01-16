@@ -11,11 +11,11 @@ class GithubProject(models.Model):
     link_connection = fields.Char(string='Connect to', compute='_compute_link')
     user_ids = fields.Many2many('res.users', string='Users')
     repository_id = fields.Many2one('github_project.repository', string='Repository',
-                                    domain=lambda self: self._get_accessible_repositories(), required=True)
+                                    domain=lambda self: self._get_accessible_repositories())
     current_user_id = fields.Many2one('res.users', string='Owner', default=lambda self: self.env.user, readonly=True)
 
     def _get_accessible_repositories(self):
-        return [('owner_id', '=', self.current_user_id)]
+        return [('owner_id', '=', self.env.user.id)]
 
     @api.one
     @api.depends('type', 'current_user_id.github_access_token')
@@ -29,27 +29,78 @@ class GithubProject(models.Model):
         else:
             self.link_connection = '/get/repositories'
 
+    def create_webhook_for_repo(self, repo_name):
+        web_hook = self.env['github_project.web_hook'].search([], limit=1)
+        web_hook = web_hook[0] if len(web_hook) > 0 else False
+
+        if not web_hook:
+            raise UserError(_("Please config Github Webhook!"))
+
+        github = OAuth2Session(web_hook.client_id)
+
+        query_access_token = '?access_token=' + self.env.user.github_access_token
+        api_domain = 'https://api.github.com/'
+        url_hooks = api_domain + 'repos/' + repo_name + '/hooks' + query_access_token
+
+        data_send = {
+            "name": "web",
+            "active": True,
+            "events": [
+                "commit_comment",
+                "delete",
+                "deployment_status",
+                "issues",
+                "pull_request_review",
+                "create",
+                "fork",
+                "issue_comment",
+                "pull_request_review_comment",
+                "release",
+                "push",
+                "pull_request"
+            ],
+            "config": {
+                "url": self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                           .replace('http', 'https') + '/repositories/callback',
+                "content_type": "json"
+            }
+        }
+
+        github.post(url_hooks, json=data_send)
+
     @api.model
     def create(self, vals):
+        print(vals)
         if vals['type'] == 'github':
-            owner = self.env['res.users'].search([('id', '=', vals['user_id'])])
-            if not owner.github_access_token:
+            if not self.env.user.github_access_token or not vals['repository_id']:
                 raise UserError(_("Please click to Refresh to authenticated and get Repositories!"))
+
+            # create a private channel
             github_user = self.env['res.users'].search([('name', 'ilike', 'Github')])
+
             if len(github_user) > 0:
                 github_user = github_user[0]
             else:
-                github_user = self.env['res.users'].create({'name': 'Github'})
-                print(github_user.id)
-                print(self.user_ids)
+                raise UserError(_("Please create a user with name is Github!"))
 
-            self.env['mail.channel'].create({'name': 'Github - ' + self.name,
-                                            'privacy': 'private',
+            partner_ids = self.env['res.users'].search([('id', 'in', vals['user_ids'][0][2])]).mapped('partner_id').ids
+
+            self.env['mail.channel'].create({'name': 'Github - ' + vals['name'],
+                                            'public': 'private',
                                              'channel_partner_ids':
-                                                 [(4, x) for x in self.user_ids] + [(4, github_user.id)],
+                                                 [(4, partner_id) for partner_id in partner_ids]
+                                                 + [(4, github_user.partner_id.id)],
                                              'email_send': False
                                              })
+            # create a web-hook for repository
+            repo_name = self.env['github_project.repository'].browse(vals['repository_id']).name
+            try:
+                self.create_webhook_for_repo(repo_name)
+            except Exception:
+                raise UserError(_("Cannot connect to Github!"))
+
         return super(GithubProject, self).create(vals)
+
 
 
 class GithubUser(models.Model):
