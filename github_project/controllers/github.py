@@ -109,5 +109,5 @@ class GithubController(http.Controller):
     @http.route(['/repo/callback'], type='http', auth="public", methods=['POST', 'GET'])
     def repo_callback(self, **kwargs):
         print(kwargs)
-        print(request)
+        print(request.zen, request.data, request.body, request.params, request.query)
         return 'hello'
