@@ -106,8 +106,8 @@ class GithubController(http.Controller):
                     request.env['github_project.repository'].create(r)
         return 'Success!'
 
-    @http.route(['/repositories/callback'], type='http', auth="public", methods=['POST'], website=True)
-    def callback(self, **kwargs):
-        print(**kwargs)
+    @http.route(['/repo/callback'], type='http', auth="public", methods=['POST', 'GET'])
+    def repo_callback(self, **kwargs):
+        print(kwargs)
         print(request)
         return 'hello'
