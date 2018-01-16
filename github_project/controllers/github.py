@@ -115,13 +115,15 @@ class GithubController(http.Controller):
         url = commit['url']
         author = commit['author']['username']
         repo = data['repository']['full_name']
+        repo_url = data['repository']['url']
         author_url = 'https://github.com/' + author
         message = commit['message']
         notification = _(
             '<div class="o_mail_notification">'
             ' New <a href="%s" target="_blank"><b>#commit</b></a> by <a href="%s" target="_blank"><b>%s</b></a>'
+            ' on <a href="%s" target="_blank"><b>%s</b></a>'
             '<br><i>%s</i>'
-            '</div>') % (url, author_url, author, message)
+            '</div>') % (url, author_url, author, repo_url, repo, message)
         git_user = request.env['res.users'].sudo().search([('name', 'ilike', 'Github')])[0]
         channels = request.env['mail.channel'].sudo().search([('repo', 'ilike', repo)])
         print(channels)
