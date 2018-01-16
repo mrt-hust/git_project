@@ -113,7 +113,7 @@ class GithubController(http.Controller):
         if not commit:
             return False
         url = commit['url']
-        author = commit['username']
+        author = commit['author']['username']
         repo = author + '/' + data['repository']['name']
         author_url = 'https://github.com/' + author
         message = data['head_commit']['message']
