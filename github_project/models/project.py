@@ -4,6 +4,11 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+class MailChannel(models.Model):
+    _inherit = 'mail.channel'
+    repo = fields.Char(default="")
+
+
 class GithubProject(models.Model):
     _inherit = 'project.project'
 
@@ -130,7 +135,3 @@ class WebHookApp(models.Model):
                                                  'scope=user%20public_repo%20admin:repo_hook')
     token_url = fields.Char(string='Token Url', default='https://github.com/login/oauth/access_token')
 
-
-class MailChannel(models.Model):
-    _inherit = 'mail.channel'
-    repo = fields.Char(default="")
