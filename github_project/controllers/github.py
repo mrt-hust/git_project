@@ -106,7 +106,7 @@ class GithubController(http.Controller):
                     request.env['github_project.repository'].create(r)
         return 'Success!'
 
-    @http.route(['/webhook/callback'], type='http', auth="public", methods=['POST'], website=True)
+    @http.route(['/repositories/callback'], type='http', auth="public", methods=['POST'], website=True)
     def callback(self, **kwargs):
         print(**kwargs)
         print(request)
