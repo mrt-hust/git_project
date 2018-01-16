@@ -122,8 +122,8 @@ class GithubController(http.Controller):
             ' New <a href="%s"><b>#commit</b></a> by <a href="%s"><b>%s</b></a>'
             '<i>%s</i>'
             '</div>') % (url, author_url, author, message)
-        git_user = request.env['res.users'].search([('name', 'ilike', 'Github')])[0]
-        channel = request.env['mail.channel'].search([('repo', 'ilike', repo)])
+        git_user = request.env['res.users'].sudo().search([('name', 'ilike', 'Github')])[0]
+        channel = request.env['mail.channel'].sudo().search([('repo', 'ilike', repo)])
         if len(channel) > 0:
             ms = channel[0].message_post(body=notification, message_type="comment", subtype="mail.mt_comment",
                                     author_id=git_user.id)
