@@ -108,6 +108,17 @@ class GithubController(http.Controller):
 
     @http.route(['/repo/callback'], type='json', auth="public", methods=['POST'])
     def repo_callback(self, **kwargs):
-        print(kwargs)
-        print(request.zen, request.data, request.body, request.params, request.query)
-        return 'hello'
+        data = request.jsonrequest
+        url = data['head_commit']['url']
+        author = data['head_commit']['username']
+        author_url = 'https://github.com/' + author
+        message = data['head_commit']['message']
+        notification = _(
+            '<div class="o_mail_notification">'
+            ' New <a href="%s"><b>#commit</b></a> by <a href="%s"><b>%s</b></a>'
+            '<i>%s</i>'
+            '</div>') % (url, author_url, author, message)
+        git_user = request.env['res.users'].search([('name', 'ilike', 'Github')])[0]
+        self.message_post(body=notification, message_type="comment", subtype="mail.mt_comment",
+                          author_id=git_user.id)
+        return True

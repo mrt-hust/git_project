@@ -71,7 +71,6 @@ class GithubProject(models.Model):
     @api.model
     def create(self, vals):
         if vals['type'] == 'github':
-
             if not self.env.user.github_access_token or not vals['repository_id']:
                 raise UserError(_("Please click to Refresh to authenticated and get Repositories!"))
 
@@ -102,7 +101,6 @@ class GithubProject(models.Model):
         return super(GithubProject, self).create(vals)
 
 
-
 class GithubUser(models.Model):
     _inherit = 'res.users'
 
@@ -122,6 +120,7 @@ class Repository(models.Model):
 
 class WebHookApp(models.Model):
     _name = 'github_project.web_hook'
+
     name = fields.Char(string='Name', default='Github')
     client_id = fields.Char(string='Client ID', default='acc785f6b36dc847308b')
     client_secret = fields.Char(string='Client Secret', default='4b98519c3cc08073dc25d2c460e58e0fbe9895f5')
