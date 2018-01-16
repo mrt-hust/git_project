@@ -92,7 +92,6 @@ class GithubProject(models.Model):
             repo_name = self.env['github_project.repository'].browse(vals['repository_id']).name
 
             self.env['mail.channel'].create({'name': vals['name'] + ' - Github Project',
-                                            'public': 'private',
                                              'repo': repo_name,
                                              'channel_partner_ids':
                                                  [(4, partner_id) for partner_id in partner_ids]

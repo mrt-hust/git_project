@@ -114,18 +114,18 @@ class GithubController(http.Controller):
             return False
         url = commit['url']
         author = commit['author']['username']
-        repo = author + '/' + data['repository']['name']
+        repo = data['repository']['full_name']
         author_url = 'https://github.com/' + author
-        message = data['head_commit']['message']
+        message = commit['message']
         notification = _(
             '<div class="o_mail_notification">'
             ' New <a href="%s"><b>#commit</b></a> by <a href="%s"><b>%s</b></a>'
-            '<i>%s</i>'
+            '</br><i>%s</i>'
             '</div>') % (url, author_url, author, message)
         git_user = request.env['res.users'].sudo().search([('name', 'ilike', 'Github')])[0]
         channel = request.env['mail.channel'].sudo().search([('repo', 'ilike', repo)])
         if len(channel) > 0:
             ms = channel[0].message_post(body=notification, message_type="comment", subtype="mail.mt_comment",
-                                    author_id=git_user.id)
+                                         author_id=git_user.id)
             print(ms)
         return True
