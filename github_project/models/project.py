@@ -71,6 +71,7 @@ class GithubProject(models.Model):
     @api.model
     def create(self, vals):
         if vals['type'] == 'github':
+
             if not self.env.user.github_access_token or not vals['repository_id']:
                 raise UserError(_("Please click to Refresh to authenticated and get Repositories!"))
 
