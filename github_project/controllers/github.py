@@ -123,9 +123,10 @@ class GithubController(http.Controller):
             '</br><i>%s</i>'
             '</div>') % (url, author_url, author, message)
         git_user = request.env['res.users'].sudo().search([('name', 'ilike', 'Github')])[0]
-        channel = request.env['mail.channel'].sudo().search([('repo', 'ilike', repo)])
-        if len(channel) > 0:
-            ms = channel[0].message_post(body=notification, message_type="comment", subtype="mail.mt_comment",
-                                         author_id=git_user.id)
+        channels = request.env['mail.channel'].sudo().search([('repo', 'ilike', repo)])
+        print(channels)
+        for channel in channels:
+            ms = channel.message_post(body=notification, message_type="comment", subtype="mail.mt_comment",
+                                        author_id=git_user.id)
             print(ms)
         return True
