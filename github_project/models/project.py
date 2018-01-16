@@ -83,16 +83,17 @@ class GithubProject(models.Model):
                 raise UserError(_("Please create a user with name is Github!"))
 
             partner_ids = self.env['res.users'].search([('id', 'in', vals['user_ids'][0][2])]).mapped('partner_id').ids
+            repo_name = self.env['github_project.repository'].browse(vals['repository_id']).name
 
-            self.env['mail.channel'].create({'name': 'Github - ' + vals['name'],
+            self.env['mail.channel'].create({'name': vals['name'] + ' - Github Project',
                                             'public': 'private',
+                                             'repo': repo_name,
                                              'channel_partner_ids':
                                                  [(4, partner_id) for partner_id in partner_ids]
                                                  + [(4, github_user.partner_id.id)],
                                              'email_send': False
                                              })
             # create a web-hook for repository
-            repo_name = self.env['github_project.repository'].browse(vals['repository_id']).name
             try:
                 self.create_webhook_for_repo(repo_name)
             except Exception:
@@ -130,3 +131,6 @@ class WebHookApp(models.Model):
     token_url = fields.Char(string='Token Url', default='https://github.com/login/oauth/access_token')
 
 
+class MailChannel(models.Model):
+    _inherit = 'mail.channel'
+    repo = fields.Char(default="")
