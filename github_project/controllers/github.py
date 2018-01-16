@@ -19,11 +19,17 @@ class GithubController(http.Controller):
         code = kwargs.get('code')
         state = kwargs.get('state')
         web_hook = request.env['github_project.web_hook'].search([], limit=1)
+        web_hook = web_hook[0] if len(web_hook) > 0 else False
+        print(web_hook.client_id)
+        print(web_hook)
         if web_hook and code and state:
             url = request.env['ir.config_parameter'].sudo().get_param('web.base.url') + \
                 '/github/callback?code=' + str(code) + '&state=' + str(state)
+            url = url.replace('http', 'https')
+            print(url)
+            print(web_hook.client_id)
             github = OAuth2Session(web_hook.client_id)
             access_token = github.fetch_token(web_hook.token_url, client_secret=web_hook.client_secret,
                                               authorization_response=url)
             print(access_token)
-        return access_token
+        return 'hello'
