@@ -6,6 +6,7 @@
     'description': "",
     'depends': ['project', 'web'],
     'data': [
+        'security/ir.model.access.csv',
         'views/templates.xml',
         'views/project_views.xml',
         'views/config.xml',
