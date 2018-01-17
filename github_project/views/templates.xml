@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="github_project.success">
+        <html>
+            <head>
+                <title>Success</title>
+            </head>
+            <body>
+                <div style="display: flex; flex-flow: column wrap; justify-content: center;">
+                    <h3 style="text-align: center;">Success!</h3>
+                </div>
+                <script>
+                    setTimeout(function(){
+                        window.close();
+                    }, 1000);
+                </script>
+            </body>
+        </html>
+    </template>
+</odoo>

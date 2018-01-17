@@ -46,7 +46,7 @@ class GithubController(http.Controller):
                 else:
                     request.env['github_project.repository'].create(r)
 
-        return "Success!"
+        return request.render("github_project.success")
 
     @http.route(['/github/callback'], type='http', auth="public", methods=['GET'], website=True)
     def callback(self, **kwargs):
@@ -104,7 +104,7 @@ class GithubController(http.Controller):
                     existed_r.write(r)
                 else:
                     request.env['github_project.repository'].create(r)
-        return 'Success!'
+        return request.render("github_project.success")
 
     @http.route(['/repositories/callback'], type='json', auth="public", methods=['POST'])
     def repo_callback(self, **kwargs):
