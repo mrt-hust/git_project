@@ -8,19 +8,19 @@
     </record>
 
     <record id="github_config_form_view" model="ir.ui.view">
-            <field name="name">github.config.form.view</field>
-            <field name="model">github_project.web_hook</field>
-            <field name="arch" type="xml">
-                <form>
-                     <group>
-                         <field name="name"/>
-                        <field name="client_id"/>
-                        <field name="client_secret"/>
-                        <field name="authorization_base_url"/>
-                    </group>
-                </form>
-            </field>
-        </record>
+        <field name="name">github.config.form.view</field>
+        <field name="model">github_project.web_hook</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="client_id"/>
+                    <field name="client_secret"/>
+                    <field name="authorization_base_url"/>
+                </group>
+            </form>
+        </field>
+    </record>
 
     <record id="github_config_action_form" model="ir.actions.act_window">
         <field name="name">Github WebHook</field>
@@ -28,10 +28,5 @@
         <field name="view_type">form</field>
         <field name="view_id" ref="github_config_form_view"/>
     </record>
-
-
-    <menuitem action="github_config_action_form" id="github_config"
-              parent="project.menu_project_config"/>
-
 
 </odoo>

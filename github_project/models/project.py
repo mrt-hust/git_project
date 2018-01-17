@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 
 class MailChannel(models.Model):
     _inherit = 'mail.channel'
-    
+
     repo = fields.Char(default="")
 
 
@@ -111,7 +111,7 @@ class GithubUser(models.Model):
     _inherit = 'res.users'
 
     project_ids = fields.Many2many('project.project', string='Projects')
-    github_access_token = fields.Char(string='Github Token', default='')
+    github_access_token = fields.Char(string='Github Access Token', default='')
     repository_ids = fields.One2many('github_project.repository', 'owner_id', string='Repositories')
     my_project_ids = fields.One2many('project.project', 'current_user_id', string='My Projects')
 
