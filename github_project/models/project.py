@@ -6,7 +6,6 @@ from odoo.exceptions import UserError
 
 class MailChannel(models.Model):
     _inherit = 'mail.channel'
-
     repo = fields.Char(default="")
 
 
